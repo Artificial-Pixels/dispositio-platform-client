@@ -6,6 +6,8 @@ Alle Änderungen an `@dispositio/platform-client`, aus Sicht der Werkzeuge, die 
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-04
+
 ### Hinzugefügt
 
 - **Vertrag der internen Schnittstelle** (`@dispositio/platform-client/contract`): zod-Schemas für `GET /internal/session`
