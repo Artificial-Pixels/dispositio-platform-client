@@ -6,6 +6,8 @@ Alle Änderungen an `@dispositio/platform-client`, aus Sicht der Werkzeuge, die 
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-04
+
 ### Sicherheit
 
 - **Kein Entwicklungsmodus in Produktion:** `platformAuth` startet bei `NODE_ENV=production` nicht ohne `platformUrl` (sonst wäre
