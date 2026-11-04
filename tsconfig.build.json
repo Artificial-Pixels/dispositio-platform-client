@@ -1,0 +1,14 @@
+{
+  // Build für die Installation per Git-Tag: JavaScript und Typen nach dist (scripts/release.mjs legt dist in den Tag)
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": "src",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  },
+  "include": ["src"],
+  "exclude": ["**/*.test.ts"]
+}

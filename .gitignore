@@ -1,0 +1,5 @@
+node_modules
+# dist steht nur in den Release-Tags (scripts/release.mjs), nie auf main
+dist
+*.log
+*.tsbuildinfo
