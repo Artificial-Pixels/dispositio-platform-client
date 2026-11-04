@@ -6,6 +6,11 @@ Alle Änderungen an `@dispositio/platform-client`, aus Sicht der Werkzeuge, die 
 
 ## [Unreleased]
 
+### Sicherheit
+
+- **Kein Entwicklungsmodus in Produktion:** `platformAuth` startet bei `NODE_ENV=production` nicht ohne `platformUrl` (sonst wäre
+  jeder als Testnutzer mit vollem Zugang angemeldet). Ausdrücklich erlauben lässt er sich mit `allowDevMode: true`.
+
 ## [1.0.0] - 2026-11-04
 
 ### Hinzugefügt

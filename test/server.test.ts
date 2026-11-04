@@ -142,6 +142,21 @@ describe('platformAuth: Zwischenspeicher und Ausfälle', () => {
     expect((await call('GET', '/api/health', 'down')).statusCode).toBe(200);
   });
 
+  it('in Produktion kein Entwicklungsmodus: ohne Plattform-Adresse Fehler beim Start', async () => {
+    app = Fastify();
+    await expect(
+      app.register(platformAuth, { product: 'novelist', publicPlatformUrl: 'https://dispositio.app', cookieName: 'x', allowDevMode: false }).ready(),
+    ).rejects.toThrow(/Entwicklungsmodus/);
+    const before = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'production';
+    try {
+      const prod = Fastify();
+      await expect(prod.register(platformAuth, { product: 'novelist', publicPlatformUrl: 'https://dispositio.app', cookieName: 'x' }).ready()).rejects.toThrow(/Produktion/);
+    } finally {
+      process.env.NODE_ENV = before;
+    }
+  });
+
   it('ohne internes Token mit Plattform-Adresse: Fehler beim Start', async () => {
     app = Fastify();
     await expect(app.register(platformAuth, { product: 'novelist', platformUrl: 'http://platform:3100', publicPlatformUrl: 'https://dispositio.app', cookieName: 'x' }).ready()).rejects.toThrow(/internalToken/);

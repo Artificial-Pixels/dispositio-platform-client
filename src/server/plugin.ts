@@ -72,6 +72,11 @@ export interface PlatformAuthOptions {
   allowedOrigins?: string[];
   /** Entwicklungsmodus: Zugang des Testnutzers (Standard `active`), zum Ausprobieren von Sperrseite und Weiterleitung */
   devAccess?: Access['status'];
+  /**
+   * Entwicklungsmodus erlauben (Standard: nur, wenn NODE_ENV nicht `production` ist). Schutz vor einem Werkzeug im Betrieb, dem
+   * versehentlich `platformUrl` fehlt – sonst wäre jeder als Testnutzer mit vollem Zugang angemeldet.
+   */
+  allowDevMode?: boolean;
   /** Ersetzt fetch (Tests) */
   fetch?: typeof fetch;
 }
@@ -105,6 +110,9 @@ export async function platformAuth(app: FastifyInstance, opts: PlatformAuthOptio
   const prefix = opts.apiPrefix ?? '/api/';
   const ttl = opts.cacheTtlMs ?? 60_000;
   const dev = !opts.platformUrl;
+  if (dev && !(opts.allowDevMode ?? process.env.NODE_ENV !== 'production')) {
+    throw new Error('platformAuth: platformUrl fehlt – in Produktion gibt es keinen Entwicklungsmodus (fester Testnutzer).');
+  }
   if (!dev && !opts.internalToken) throw new Error('platformAuth: internalToken ist nötig, wenn platformUrl gesetzt ist.');
   const fetchImpl = opts.fetch ?? fetch;
   const cache = new TtlCache<InternalSession | null>();
