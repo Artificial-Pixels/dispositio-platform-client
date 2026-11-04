@@ -1,0 +1,127 @@
+/*
+ * Bausteine von platform-client (Konto-Menü, Sperrseite). Setzt die Tokens voraus (styles/tokens.css bzw. die gleichnamigen Variablen
+ * des Werkzeugs: --surface, --surface-2, --border, --text, --text-muted, --radius …).
+ */
+.dp-account-menu {
+  position: relative;
+}
+.dp-account-menu > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 4px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 550;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.dp-account-menu > summary::-webkit-details-marker {
+  display: none;
+}
+.dp-account-menu > summary:focus-visible {
+  outline: 2px solid var(--accent, currentColor);
+  outline-offset: 2px;
+}
+.dp-name {
+  max-width: 14em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dp-avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 650;
+}
+.dp-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dp-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  min-width: 15rem;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius, 10px);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg, 0 10px 30px rgba(0, 0, 0, 0.12));
+}
+.dp-menu a,
+.dp-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm, 8px);
+  color: var(--text);
+  text-decoration: none;
+}
+.dp-menu a:hover,
+.dp-menu a:focus-visible {
+  background: var(--surface-2);
+  outline: none;
+}
+.dp-current {
+  font-weight: 600;
+}
+.dp-menu small {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.dp-muted {
+  color: var(--text-muted);
+}
+.dp-pill {
+  padding: 0 7px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 11px;
+}
+.dp-menu-sep {
+  height: 1px;
+  margin: 5px 4px;
+  background: var(--border);
+}
+.dp-menu-label {
+  padding: 4px 10px 2px;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.dp-locked {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 40rem;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 14px);
+  background: var(--surface);
+}
+.dp-locked p {
+  margin: 0;
+}
+.dp-locked-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}

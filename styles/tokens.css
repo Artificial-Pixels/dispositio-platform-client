@@ -1,0 +1,282 @@
+/*
+ * Farbschema und Gestaltungsgrundlagen (Design-Tokens) von Dispositio – Leitbild „Papier und Tinte“.
+ *
+ * Das ganze Farbschema hängt an den drei Grundfarben ganz oben: Papier (Grundton), Stein (Linien, ruhige Flächen) und Tinte
+ * (Schrift und Handeln). Alles andere – Flächen, Ränder, Abstufungen, Schatten, Zeichenfläche, Erzähllinie, die Seite im
+ * Manuskript und der dunkle Modus – wird daraus gemischt. Für ein neues Farbschema genügt es, diese drei Werte zu ändern;
+ * die Signalfarben darunter passen bei Bedarf dazu. Die Zeichenfläche liest die Werte zur Laufzeit (siehe lib/theme.ts).
+ */
+:root {
+  /* === Farbschema ==================================================================================================== */
+  --c-paper: #f3ede2; /* Warm Oatmeal: Grundton, Papier */
+  --c-stone: #d8d1c7; /* Textured Gray: Linien, ruhige Flächen */
+  --c-ink: #2b2b2b; /* Deep Charcoal: Schrift, Hauptaktionen */
+
+  /* Signalfarben (gedeckt, passend zum warmen Grundton) */
+  --c-danger: #a5452f;
+  --c-ok: #4d7a57;
+  --c-warn: #a87420;
+  --c-info: #4a6a8a;
+  /* verknüpfte Wörter im Text (Tintenblau: Bestätigtes ist blau, Widersprüche sind rot, Vorschläge gelb) */
+  --c-ref: #2b5c8f;
+
+  /* === Schrift ======================================================================================================= */
+  --font-ui: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  --font-page: 'Literata Variable', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  --mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
+  --font: var(--font-ui);
+
+  /* === Form und Bewegung (Animationen immer weich) ==================================================================== */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 0.14s;
+  --dur: 0.22s;
+
+  /* === Hell: aus dem Farbschema gemischt ============================================================================== */
+  --lt-bg: var(--c-paper);
+  --lt-chrome: var(--c-paper);
+  --lt-canvas: color-mix(in oklab, var(--c-paper) 48%, #fff);
+  --lt-surface: color-mix(in oklab, var(--c-paper) 32%, #fff);
+  --lt-surface-2: color-mix(in oklab, var(--c-stone) 42%, var(--c-paper));
+  --lt-surface-3: color-mix(in oklab, var(--c-stone) 78%, var(--c-paper));
+  --lt-border: color-mix(in oklab, var(--c-stone) 82%, var(--c-paper));
+  --lt-border-strong: color-mix(in oklab, var(--c-stone) 84%, var(--c-ink));
+  --lt-text: var(--c-ink);
+  --lt-text-muted: color-mix(in oklab, var(--c-ink) 66%, var(--c-paper));
+  --lt-text-faint: color-mix(in oklab, var(--c-ink) 46%, var(--c-paper));
+  --lt-accent: var(--c-ink);
+  --lt-accent-hover: color-mix(in oklab, var(--c-ink) 84%, var(--c-paper));
+  --lt-accent-contrast: var(--c-paper);
+  --lt-accent-soft: color-mix(in oklab, var(--c-stone) 60%, var(--c-paper));
+  --lt-focus: color-mix(in oklab, var(--c-ink) 13%, transparent);
+  /* Führung durch das Tutorial: bewusst Blau, damit sie sich vom Papier-und-Tinte-Schema abhebt */
+  --lt-guide: #2f6fe4;
+  --lt-overlay: color-mix(in oklab, var(--c-ink) 40%, transparent);
+  --lt-shadow-xs: 0 1px 1px color-mix(in oklab, var(--c-ink) 5%, transparent);
+  --lt-shadow-sm: 0 1px 2px color-mix(in oklab, var(--c-ink) 7%, transparent), 0 3px 8px -3px color-mix(in oklab, var(--c-ink) 10%, transparent);
+  --lt-shadow: 0 1px 2px color-mix(in oklab, var(--c-ink) 6%, transparent), 0 12px 28px -10px color-mix(in oklab, var(--c-ink) 24%, transparent);
+  --lt-shadow-lg: 0 2px 6px color-mix(in oklab, var(--c-ink) 7%, transparent), 0 30px 60px -20px color-mix(in oklab, var(--c-ink) 34%, transparent);
+  --lt-danger: var(--c-danger);
+  --lt-ok: var(--c-ok);
+  --lt-warn: var(--c-warn);
+  --lt-info: var(--c-info);
+  --lt-danger-soft: color-mix(in oklab, var(--c-danger) 11%, var(--lt-surface));
+  --lt-ok-soft: color-mix(in oklab, var(--c-ok) 12%, var(--lt-surface));
+  --lt-warn-soft: color-mix(in oklab, var(--c-warn) 14%, var(--lt-surface));
+  --lt-info-soft: color-mix(in oklab, var(--c-info) 11%, var(--lt-surface));
+  --lt-ref: var(--c-ref);
+  --lt-band: color-mix(in oklab, var(--c-stone) 30%, var(--c-paper));
+  --lt-band-chapter: color-mix(in oklab, var(--lt-surface) 70%, transparent);
+  --lt-band-edge: var(--lt-border);
+  --lt-band-highlight: color-mix(in oklab, #fff 70%, transparent);
+  --lt-band-shadow: color-mix(in oklab, var(--c-ink) 16%, transparent);
+  --lt-desk: color-mix(in oklab, var(--c-stone) 46%, var(--c-paper));
+  --lt-page: color-mix(in oklab, var(--c-paper) 36%, #fff);
+  --lt-page-shadow: 0 1px 2px color-mix(in oklab, var(--c-ink) 8%, transparent), 0 24px 50px -22px color-mix(in oklab, var(--c-ink) 30%, transparent);
+  --lt-flag-fill: var(--lt-surface);
+  --lt-flag-line: var(--lt-border-strong);
+  --lt-tooltip: var(--c-ink);
+  --lt-tooltip-text: var(--c-paper);
+
+  /* === Dunkel: dieselben drei Farben, umgekehrt (Tinte als Grund, Papier als Schrift) ================================= */
+  --dk-bg: color-mix(in oklab, var(--c-ink) 86%, #000);
+  --dk-chrome: color-mix(in oklab, var(--c-ink) 86%, #000);
+  --dk-canvas: color-mix(in oklab, var(--c-ink) 96%, #000);
+  --dk-surface: color-mix(in oklab, var(--c-ink) 91%, var(--c-paper));
+  --dk-surface-2: color-mix(in oklab, var(--c-ink) 84%, var(--c-stone));
+  --dk-surface-3: color-mix(in oklab, var(--c-ink) 70%, var(--c-stone));
+  --dk-border: color-mix(in oklab, var(--c-ink) 80%, var(--c-stone));
+  --dk-border-strong: color-mix(in oklab, var(--c-ink) 64%, var(--c-stone));
+  --dk-text: var(--c-paper);
+  --dk-text-muted: color-mix(in oklab, var(--c-paper) 64%, var(--c-ink));
+  --dk-text-faint: color-mix(in oklab, var(--c-paper) 42%, var(--c-ink));
+  --dk-accent: var(--c-paper);
+  --dk-accent-hover: color-mix(in oklab, var(--c-paper) 86%, var(--c-ink));
+  --dk-accent-contrast: var(--c-ink);
+  --dk-accent-soft: color-mix(in oklab, var(--c-ink) 74%, var(--c-stone));
+  --dk-focus: color-mix(in oklab, var(--c-paper) 22%, transparent);
+  --dk-guide: #6f9dff;
+  --dk-overlay: color-mix(in oklab, #000 58%, transparent);
+  --dk-shadow-xs: 0 1px 1px rgb(0 0 0 / 0.3);
+  --dk-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35), 0 3px 8px -3px rgb(0 0 0 / 0.4);
+  --dk-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 14px 32px -10px rgb(0 0 0 / 0.6);
+  --dk-shadow-lg: 0 2px 6px rgb(0 0 0 / 0.45), 0 32px 64px -20px rgb(0 0 0 / 0.7);
+  --dk-danger: color-mix(in oklab, var(--c-danger) 58%, var(--c-paper));
+  --dk-ok: color-mix(in oklab, var(--c-ok) 58%, var(--c-paper));
+  --dk-warn: color-mix(in oklab, var(--c-warn) 62%, var(--c-paper));
+  --dk-info: color-mix(in oklab, var(--c-info) 58%, var(--c-paper));
+  --dk-danger-soft: color-mix(in oklab, var(--c-danger) 24%, var(--dk-surface));
+  --dk-ok-soft: color-mix(in oklab, var(--c-ok) 24%, var(--dk-surface));
+  --dk-warn-soft: color-mix(in oklab, var(--c-warn) 24%, var(--dk-surface));
+  --dk-info-soft: color-mix(in oklab, var(--c-info) 24%, var(--dk-surface));
+  --dk-ref: color-mix(in oklab, var(--c-ref) 50%, var(--c-paper));
+  --dk-band: color-mix(in oklab, var(--c-ink) 92%, #000);
+  --dk-band-chapter: color-mix(in oklab, var(--c-paper) 4%, transparent);
+  --dk-band-edge: var(--dk-border);
+  --dk-band-highlight: color-mix(in oklab, #fff 6%, transparent);
+  --dk-band-shadow: rgb(0 0 0 / 0.55);
+  --dk-desk: color-mix(in oklab, var(--c-ink) 78%, #000);
+  --dk-page: color-mix(in oklab, var(--c-ink) 95%, var(--c-paper));
+  --dk-page-shadow: 0 1px 2px rgb(0 0 0 / 0.5), 0 24px 50px -22px rgb(0 0 0 / 0.75);
+  --dk-flag-fill: var(--dk-surface);
+  --dk-flag-line: var(--dk-border-strong);
+  --dk-tooltip: var(--c-paper);
+  --dk-tooltip-text: var(--c-ink);
+
+  color-scheme: light dark;
+}
+
+/* === Zuordnung: was die Oberfläche benutzt (hell) ==================================================================== */
+:root {
+  --bg: var(--lt-bg);
+  --chrome: var(--lt-chrome);
+  --canvas: var(--lt-canvas);
+  --surface: var(--lt-surface);
+  --surface-2: var(--lt-surface-2);
+  --surface-3: var(--lt-surface-3);
+  --border: var(--lt-border);
+  --border-strong: var(--lt-border-strong);
+  --text: var(--lt-text);
+  --text-muted: var(--lt-text-muted);
+  --text-faint: var(--lt-text-faint);
+  --accent: var(--lt-accent);
+  --accent-hover: var(--lt-accent-hover);
+  --accent-contrast: var(--lt-accent-contrast);
+  --accent-soft: var(--lt-accent-soft);
+  --focus: var(--lt-focus);
+  --guide: var(--lt-guide);
+  --overlay: var(--lt-overlay);
+  --shadow-xs: var(--lt-shadow-xs);
+  --shadow-sm: var(--lt-shadow-sm);
+  --shadow: var(--lt-shadow);
+  --shadow-lg: var(--lt-shadow-lg);
+  --danger: var(--lt-danger);
+  --ok: var(--lt-ok);
+  --warn: var(--lt-warn);
+  --info: var(--lt-info);
+  --danger-soft: var(--lt-danger-soft);
+  --ok-soft: var(--lt-ok-soft);
+  --warn-soft: var(--lt-warn-soft);
+  --info-soft: var(--lt-info-soft);
+  --ref-link: var(--lt-ref);
+  --band: var(--lt-band);
+  --band-chapter: var(--lt-band-chapter);
+  --band-edge: var(--lt-band-edge);
+  --band-highlight: var(--lt-band-highlight);
+  --band-shadow: var(--lt-band-shadow);
+  --desk: var(--lt-desk);
+  --page: var(--lt-page);
+  --page-text: var(--lt-text);
+  --page-shadow: var(--lt-page-shadow);
+  --page-font: var(--font-page);
+  --flag-fill: var(--lt-flag-fill);
+  --flag-line: var(--lt-flag-line);
+  /* Ton der Cover in der Übersicht der Geschichten: Anteil der Farbe im Papier */
+  --cover-tint: 15%;
+  --tooltip: var(--lt-tooltip);
+  --tooltip-text: var(--lt-tooltip-text);
+}
+
+/* === Zuordnung dunkel: nach dem System (oder mit data-theme="dark" am Wurzelelement) ================================= */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: var(--dk-bg);
+    --chrome: var(--dk-chrome);
+    --canvas: var(--dk-canvas);
+    --surface: var(--dk-surface);
+    --surface-2: var(--dk-surface-2);
+    --surface-3: var(--dk-surface-3);
+    --border: var(--dk-border);
+    --border-strong: var(--dk-border-strong);
+    --text: var(--dk-text);
+    --text-muted: var(--dk-text-muted);
+    --text-faint: var(--dk-text-faint);
+    --accent: var(--dk-accent);
+    --accent-hover: var(--dk-accent-hover);
+    --accent-contrast: var(--dk-accent-contrast);
+    --accent-soft: var(--dk-accent-soft);
+    --focus: var(--dk-focus);
+    --guide: var(--dk-guide);
+    --overlay: var(--dk-overlay);
+    --shadow-xs: var(--dk-shadow-xs);
+    --shadow-sm: var(--dk-shadow-sm);
+    --shadow: var(--dk-shadow);
+    --shadow-lg: var(--dk-shadow-lg);
+    --danger: var(--dk-danger);
+    --ok: var(--dk-ok);
+    --warn: var(--dk-warn);
+    --info: var(--dk-info);
+    --danger-soft: var(--dk-danger-soft);
+    --ok-soft: var(--dk-ok-soft);
+    --warn-soft: var(--dk-warn-soft);
+    --info-soft: var(--dk-info-soft);
+    --ref-link: var(--dk-ref);
+    --band: var(--dk-band);
+    --band-chapter: var(--dk-band-chapter);
+    --band-edge: var(--dk-band-edge);
+    --band-highlight: var(--dk-band-highlight);
+    --band-shadow: var(--dk-band-shadow);
+    --desk: var(--dk-desk);
+    --page: var(--dk-page);
+    --page-text: var(--dk-text);
+    --page-shadow: var(--dk-page-shadow);
+    --flag-fill: var(--dk-flag-fill);
+    --flag-line: var(--dk-flag-line);
+    --cover-tint: 26%;
+    --tooltip: var(--dk-tooltip);
+    --tooltip-text: var(--dk-tooltip-text);
+  }
+}
+:root[data-theme='dark'] {
+  --bg: var(--dk-bg);
+  --chrome: var(--dk-chrome);
+  --canvas: var(--dk-canvas);
+  --surface: var(--dk-surface);
+  --surface-2: var(--dk-surface-2);
+  --surface-3: var(--dk-surface-3);
+  --border: var(--dk-border);
+  --border-strong: var(--dk-border-strong);
+  --text: var(--dk-text);
+  --text-muted: var(--dk-text-muted);
+  --text-faint: var(--dk-text-faint);
+  --accent: var(--dk-accent);
+  --accent-hover: var(--dk-accent-hover);
+  --accent-contrast: var(--dk-accent-contrast);
+  --accent-soft: var(--dk-accent-soft);
+  --focus: var(--dk-focus);
+  --guide: var(--dk-guide);
+  --overlay: var(--dk-overlay);
+  --shadow-xs: var(--dk-shadow-xs);
+  --shadow-sm: var(--dk-shadow-sm);
+  --shadow: var(--dk-shadow);
+  --shadow-lg: var(--dk-shadow-lg);
+  --danger: var(--dk-danger);
+  --ok: var(--dk-ok);
+  --warn: var(--dk-warn);
+  --info: var(--dk-info);
+  --danger-soft: var(--dk-danger-soft);
+  --ok-soft: var(--dk-ok-soft);
+  --warn-soft: var(--dk-warn-soft);
+  --info-soft: var(--dk-info-soft);
+  --ref-link: var(--dk-ref);
+  --band: var(--dk-band);
+  --band-chapter: var(--dk-band-chapter);
+  --band-edge: var(--dk-band-edge);
+  --band-highlight: var(--dk-band-highlight);
+  --band-shadow: var(--dk-band-shadow);
+  --desk: var(--dk-desk);
+  --page: var(--dk-page);
+  --page-text: var(--dk-text);
+  --page-shadow: var(--dk-page-shadow);
+  --flag-fill: var(--dk-flag-fill);
+  --flag-line: var(--dk-flag-line);
+  --cover-tint: 26%;
+  --tooltip: var(--dk-tooltip);
+  --tooltip-text: var(--dk-tooltip-text);
+}

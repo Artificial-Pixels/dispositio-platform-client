@@ -4,7 +4,7 @@
  */
 import { z } from 'zod';
 
-/** Werkzeuge von Dispositio; die Plattform hat zu jedem Name, Adresse und Status (packages/shared/src/products.ts). */
+/** Werkzeuge von Dispositio */
 export const PRODUCT_KEYS = ['novelist', 'quest'] as const;
 export const productKeySchema = z.enum(PRODUCT_KEYS);
 export type ProductKey = z.infer<typeof productKeySchema>;
@@ -36,6 +36,15 @@ export const platformUserSchema = z.object({
 });
 export type PlatformUser = z.infer<typeof platformUserSchema>;
 
+/** Ein Werkzeug für Produktumschalter und Hinweise: Name, Adresse (null = hier nicht erreichbar), im Betrieb oder angekündigt */
+export const productInfoSchema = z.object({
+  key: productKeySchema,
+  name: z.string().min(1),
+  url: z.url().nullable(),
+  status: z.enum(['live', 'soon']),
+});
+export type ProductInfo = z.infer<typeof productInfoSchema>;
+
 /** Header mit dem Wert des Sitzungs-Cookies, den ein Werkzeug an `GET /internal/session` weiterreicht */
 export const SESSION_TOKEN_HEADER = 'x-session-token';
 export const INTERNAL_SESSION_PATH = '/internal/session';
@@ -45,6 +54,8 @@ export const internalSessionSchema = z.object({
   user: platformUserSchema,
   csrfToken: z.string().min(16),
   access: z.object({ novelist: accessSchema, quest: accessSchema }),
+  /** alle Werkzeuge, in der Reihenfolge des Produktumschalters */
+  products: z.array(productInfoSchema),
   sessionExpiresAt: z.iso.datetime(),
 });
 export type InternalSession = z.infer<typeof internalSessionSchema>;
@@ -59,3 +70,45 @@ export const userSummarySchema = z.object({
   lastActivityAt: z.iso.datetime().nullable(),
 });
 export type UserSummary = z.infer<typeof userSummarySchema>;
+
+// ---------------------------------------------------------------------------
+// Werkzeug: eigener Server ↔ eigene Oberfläche (platform-client/server → platform-client/react)
+// ---------------------------------------------------------------------------
+
+/** Antwort von `GET /api/me` eines Werkzeugs */
+export const toolMeSchema = z.object({
+  user: platformUserSchema,
+  csrfToken: z.string().min(16),
+  /** dieses Werkzeug */
+  product: productKeySchema,
+  /** Zugang zu diesem Werkzeug */
+  access: accessSchema,
+  products: z.array(productInfoSchema),
+  /** öffentliche Adresse der Plattform, z. B. https://dispositio.app */
+  platformUrl: z.url(),
+  /** Entwicklungsmodus ohne Plattform (fester Testnutzer) */
+  dev: z.boolean(),
+});
+export type ToolMe = z.infer<typeof toolMeSchema>;
+
+/** Fehler der Werkzeug-API, wenn Sitzung oder Zugang fehlen: wohin die Oberfläche weiterleitet */
+export interface PlatformRedirectError {
+  code: 'unauthorized' | 'forbidden';
+  message: string;
+  details: { redirect: string; access?: Access };
+}
+
+/** Adressen der Plattform, die Werkzeuge verlinken (Seiten der Konto-App) */
+export const platformLinks = (platformUrl: string, product: ProductKey) => {
+  const base = platformUrl.replace(/\/+$/, '');
+  return {
+    account: `${base}/konto`,
+    profile: `${base}/konto/profil`,
+    security: `${base}/konto/sicherheit`,
+    /** nach dem Anmelden zurück zu `returnTo` (die Plattform lässt nur bekannte Werkzeuge zu) */
+    login: (returnTo: string) => `${base}/konto/anmelden?weiter=${encodeURIComponent(returnTo)}`,
+    /** abmelden – überall, denn die Sitzung gehört der Plattform; danach zur Anmeldung mit Rückweg */
+    logout: (returnTo: string) => `${base}/konto/abmelden?weiter=${encodeURIComponent(returnTo)}`,
+    noAccess: `${base}/konto/kein-zugang/${product}`,
+  };
+};

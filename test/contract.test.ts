@@ -8,6 +8,10 @@ const session = {
     novelist: { status: 'active', source: 'beta', endsAt: null },
     quest: { status: 'none' },
   },
+  products: [
+    { key: 'novelist', name: 'Dispositio Novelist', url: 'https://novelist.dispositio.app', status: 'live' },
+    { key: 'quest', name: 'Dispositio Quest', url: null, status: 'soon' },
+  ],
   sessionExpiresAt: '2026-11-18T10:00:00.000Z',
 };
 
