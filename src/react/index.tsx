@@ -75,11 +75,14 @@ export function PlatformAvatar({ user, size = 28 }: { user: PlatformUser; size?:
 
 /**
  * Konto-Menü für die Kopfleiste eines Werkzeugs: Profilbild und Name; aufgeklappt Konto, Profil, Sicherheit (auf der Plattform), die
- * Werkzeuge (dieses markiert, angekündigte als „Bald“) und Abmelden – überall, denn die Sitzung gehört der Plattform.
+ * Werkzeuge zum direkten Wechsel und Abmelden – überall, denn die Sitzung gehört der Plattform. Die Plattform nennt in `me.products`
+ * nur die Werkzeuge dieses Kontos; hat es nur dieses eine, entfällt der Abschnitt „Werkzeuge“ ganz – wer nur Novelist hat, sieht kein
+ * anderes Werkzeug.
  */
 export function AccountMenu({ me, labels = DEFAULT_LABELS, returnTo }: { me: ToolMe; labels?: PlatformLabels; returnTo?: string }) {
   const links = platformLinks(me.platformUrl, me.product);
   const ref = useRef<HTMLDetailsElement>(null);
+  const switchable = me.products.some((p) => p.key !== me.product);
   const back = returnTo ?? (typeof window !== 'undefined' ? window.location.href : me.platformUrl);
 
   // schließen bei Klick daneben oder Escape
@@ -107,22 +110,26 @@ export function AccountMenu({ me, labels = DEFAULT_LABELS, returnTo }: { me: Too
         <a href={links.account}>{labels.account}</a>
         <a href={links.profile}>{labels.profile}</a>
         <a href={links.security}>{labels.security}</a>
-        <div className="dp-menu-sep" role="separator" />
-        <div className="dp-menu-label">{labels.tools}</div>
-        {me.products.map((p) =>
-          p.key === me.product ? (
-            <span key={p.key} className="dp-menu-item dp-current" aria-current="page">
-              {p.name} <small>{labels.current}</small>
-            </span>
-          ) : p.status === 'soon' || !p.url ? (
-            <span key={p.key} className="dp-menu-item dp-muted">
-              {p.name} {p.status === 'soon' && <small className="dp-pill">{labels.soon}</small>}
-            </span>
-          ) : (
-            <a key={p.key} href={p.url}>
-              {p.name}
-            </a>
-          ),
+        {switchable && (
+          <>
+            <div className="dp-menu-sep" role="separator" />
+            <div className="dp-menu-label">{labels.tools}</div>
+            {me.products.map((p) =>
+              p.key === me.product ? (
+                <span key={p.key} className="dp-menu-item dp-current" aria-current="page">
+                  {p.name} <small>{labels.current}</small>
+                </span>
+              ) : p.status === 'soon' || !p.url ? (
+                <span key={p.key} className="dp-menu-item dp-muted">
+                  {p.name} {p.status === 'soon' && <small className="dp-pill">{labels.soon}</small>}
+                </span>
+              ) : (
+                <a key={p.key} href={p.url}>
+                  {p.name}
+                </a>
+              ),
+            )}
+          </>
         )}
         <div className="dp-menu-sep" role="separator" />
         <a href={links.logout(back)} data-testid="account-logout">

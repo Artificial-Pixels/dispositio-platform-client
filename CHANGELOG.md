@@ -6,6 +6,12 @@ Alle Änderungen an `@dispositio/platform-client`, aus Sicht der Werkzeuge, die 
 
 ## [Unreleased]
 
+### Geändert
+
+- **Konto-Menü nur mit den eigenen Werkzeugen:** Die Plattform nennt in `products` jetzt nur die Werkzeuge des Kontos (das fragende
+  und die mit Zugang). Hat ein Konto nur dieses eine Werkzeug, zeigt `AccountMenu` den Abschnitt „Werkzeuge“ gar nicht; mit mehreren
+  wechselt man dort direkt ins andere. Der Entwicklungsmodus nennt nur das eigene Werkzeug.
+
 ## [1.0.1] - 2026-11-04
 
 ### Sicherheit

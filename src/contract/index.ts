@@ -49,12 +49,15 @@ export type ProductInfo = z.infer<typeof productInfoSchema>;
 export const SESSION_TOKEN_HEADER = 'x-session-token';
 export const INTERNAL_SESSION_PATH = '/internal/session';
 
-/** Antwort von `GET /internal/session` (401 ohne gültige Sitzung). `access` nennt jedes Werkzeug. */
+/** Antwort von `GET /internal/session` (401 ohne gültige Sitzung, 403 bei falschem Werkzeug-Token). `access` nennt jedes Werkzeug. */
 export const internalSessionSchema = z.object({
   user: platformUserSchema,
   csrfToken: z.string().min(16),
   access: z.object({ novelist: accessSchema, quest: accessSchema }),
-  /** alle Werkzeuge, in der Reihenfolge des Produktumschalters */
+  /**
+   * Werkzeuge dieses Kontos für den Produktumschalter: das fragende und die, für die es Zugang gibt oder gab – nie eines ohne Zugang
+   * (seit Plattform-Stand 05.11.2026; vorher alle Werkzeuge)
+   */
   products: z.array(productInfoSchema),
   sessionExpiresAt: z.iso.datetime(),
 });

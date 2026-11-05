@@ -36,6 +36,25 @@ describe('Konto-Menü', () => {
     expect(html).toMatch(/Dispositio Quest <small class="dp-pill">Bald<\/small>/);
     expect(html).toContain('href="https://dispositio.app/konto/abmelden?weiter=https%3A%2F%2Fnovelist.dispositio.app%2Fp%2F1"');
   });
+
+  it('nur dieses Werkzeug im Konto: kein Abschnitt „Werkzeuge“', () => {
+    const only: ToolMe = { ...me({ status: 'active', source: 'beta', endsAt: null }), products: [{ key: 'novelist', name: 'Dispositio Novelist', url: null, status: 'live' }] };
+    const html = renderToStaticMarkup(<AccountMenu me={only} />);
+    expect(html).not.toContain('Werkzeuge');
+    expect(html).not.toContain('Dispositio Novelist');
+    expect(html).toContain('Abmelden');
+  });
+
+  it('Kombi: das andere Werkzeug als Link zum direkten Wechsel', () => {
+    const both: ToolMe = {
+      ...me({ status: 'active', source: 'beta', endsAt: null }),
+      products: [
+        { key: 'novelist', name: 'Dispositio Novelist', url: 'https://novelist.dispositio.app', status: 'live' },
+        { key: 'quest', name: 'Dispositio Quest', url: 'https://quest.dispositio.app', status: 'live' },
+      ],
+    };
+    expect(renderToStaticMarkup(<AccountMenu me={both} />)).toContain('<a href="https://quest.dispositio.app">Dispositio Quest</a>');
+  });
 });
 
 describe('Sperrseite', () => {

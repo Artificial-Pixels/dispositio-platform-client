@@ -81,6 +81,8 @@ export interface PlatformAuthOptions {
   fetch?: typeof fetch;
 }
 
+const DEV_PRODUCT_NAMES: Record<ProductKey, string> = { novelist: 'Dispositio Novelist', quest: 'Dispositio Quest' };
+
 export const DEV_USER: PlatformUser = { id: '00000000-0000-4000-8000-000000000001', displayName: 'Entwicklung', avatarUrl: null, locale: 'de' };
 const DEV_CSRF = 'dev-csrf-token-0000000000000000';
 const NEGATIVE_TTL_MS = 5_000;
@@ -122,11 +124,9 @@ export async function platformAuth(app: FastifyInstance, opts: PlatformAuthOptio
     user: DEV_USER,
     csrfToken: DEV_CSRF,
     access: devAccess(opts.devAccess ?? 'active'),
-    allAccess: { novelist: devAccess(opts.devAccess ?? 'active'), quest: { status: 'none' } },
-    products: [
-      { key: 'novelist', name: 'Dispositio Novelist', url: null, status: 'live' },
-      { key: 'quest', name: 'Dispositio Quest', url: null, status: 'soon' },
-    ],
+    allAccess: { novelist: { status: 'none' }, quest: { status: 'none' }, [opts.product]: devAccess(opts.devAccess ?? 'active') },
+    // wie bei der Plattform: nur die Werkzeuge des Kontos – der Testnutzer hat nur dieses
+    products: [{ key: opts.product, name: DEV_PRODUCT_NAMES[opts.product], url: null, status: 'live' }],
     expiresAt: new Date(Date.now() + 86_400_000),
     dev: true,
   });
