@@ -6,6 +6,8 @@ Alle Änderungen an `@dispositio/platform-client`, aus Sicht der Werkzeuge, die 
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-06
+
 ### Geändert
 
 - **Konto-Menü nur mit den eigenen Werkzeugen:** Die Plattform nennt in `products` jetzt nur die Werkzeuge des Kontos (das fragende
