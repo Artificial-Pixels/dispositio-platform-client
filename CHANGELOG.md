@@ -6,6 +6,8 @@ Alle Änderungen an `@dispositio/platform-client`, aus Sicht der Werkzeuge, die 
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-07
+
 ### Hinzugefügt
 
 - **Eigene Einträge im Konto-Menü:** `AccountMenu` nimmt `items` (Name, Adresse, auf Wunsch `onSelect` für den Router des Werkzeugs);

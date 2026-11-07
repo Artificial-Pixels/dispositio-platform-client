@@ -1,6 +1,6 @@
 {
   "name": "@dispositio/platform-client",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Anbindung der Dispositio-Werkzeuge an die Plattform: Vertrag der internen Schnittstelle, Fastify-Plugin, React-Teile und Tokens.",
   "private": true,
   "type": "module",
