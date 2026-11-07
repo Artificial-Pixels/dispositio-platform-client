@@ -37,6 +37,15 @@ describe('Konto-Menü', () => {
     expect(html).toContain('href="https://dispositio.app/konto/abmelden?weiter=https%3A%2F%2Fnovelist.dispositio.app%2Fp%2F1"');
   });
 
+  it('eigene Einträge des Werkzeugs (Einstellungen) stehen unter Konto, Profil und Sicherheit', () => {
+    const html = renderToStaticMarkup(<AccountMenu me={me({ status: 'active', source: 'beta', endsAt: null })} items={[{ label: 'Einstellungen', href: '/app/einstellungen', testId: 'account-settings', onSelect: () => {} }]} />);
+    expect(html).toContain('<a href="/app/einstellungen" data-testid="account-settings">Einstellungen</a>');
+    expect(html.indexOf('>Sicherheit</a>')).toBeLessThan(html.indexOf('>Einstellungen</a>'));
+    expect(html.indexOf('>Einstellungen</a>')).toBeLessThan(html.indexOf('Abmelden'));
+    // ohne Einträge wie bisher
+    expect(renderToStaticMarkup(<AccountMenu me={me({ status: 'active', source: 'beta', endsAt: null })} />)).not.toContain('Einstellungen');
+  });
+
   it('nur dieses Werkzeug im Konto: kein Abschnitt „Werkzeuge“', () => {
     const only: ToolMe = { ...me({ status: 'active', source: 'beta', endsAt: null }), products: [{ key: 'novelist', name: 'Dispositio Novelist', url: null, status: 'live' }] };
     const html = renderToStaticMarkup(<AccountMenu me={only} />);

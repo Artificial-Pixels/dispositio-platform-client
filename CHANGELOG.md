@@ -6,6 +6,11 @@ Alle Änderungen an `@dispositio/platform-client`, aus Sicht der Werkzeuge, die 
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **Eigene Einträge im Konto-Menü:** `AccountMenu` nimmt `items` (Name, Adresse, auf Wunsch `onSelect` für den Router des Werkzeugs);
+  sie stehen unter Konto, Profil und Sicherheit – etwa „Einstellungen“ in Novelist. Ohne `items` bleibt das Menü, wie es ist.
+
 ## [1.1.0] - 2026-11-06
 
 ### Geändert

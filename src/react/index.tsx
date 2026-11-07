@@ -74,12 +74,23 @@ export function PlatformAvatar({ user, size = 28 }: { user: PlatformUser; size?:
 }
 
 /**
- * Konto-Menü für die Kopfleiste eines Werkzeugs: Profilbild und Name; aufgeklappt Konto, Profil, Sicherheit (auf der Plattform), die
- * Werkzeuge zum direkten Wechsel und Abmelden – überall, denn die Sitzung gehört der Plattform. Die Plattform nennt in `me.products`
- * nur die Werkzeuge dieses Kontos; hat es nur dieses eine, entfällt der Abschnitt „Werkzeuge“ ganz – wer nur Novelist hat, sieht kein
- * anderes Werkzeug.
+ * Eigener Eintrag des Werkzeugs im Konto-Menü (etwa „Einstellungen“): ein Link im Werkzeug. Mit `onSelect` wechselt die Oberfläche
+ * selbst dorthin (Router, ohne Neuladen) und das Menü schließt sich; Strg-, ⌘- oder Mittelklick öffnen den Link wie gewohnt.
  */
-export function AccountMenu({ me, labels = DEFAULT_LABELS, returnTo }: { me: ToolMe; labels?: PlatformLabels; returnTo?: string }) {
+export interface AccountMenuItem {
+  label: string;
+  href: string;
+  onSelect?: () => void;
+  testId?: string;
+}
+
+/**
+ * Konto-Menü für die Kopfleiste eines Werkzeugs: Profilbild und Name; aufgeklappt Konto, Profil, Sicherheit (auf der Plattform),
+ * darunter die eigenen Einträge des Werkzeugs (`items`), die Werkzeuge zum direkten Wechsel und Abmelden – überall, denn die Sitzung
+ * gehört der Plattform. Die Plattform nennt in `me.products` nur die Werkzeuge dieses Kontos; hat es nur dieses eine, entfällt der
+ * Abschnitt „Werkzeuge“ ganz – wer nur Novelist hat, sieht kein anderes Werkzeug.
+ */
+export function AccountMenu({ me, labels = DEFAULT_LABELS, returnTo, items = [] }: { me: ToolMe; labels?: PlatformLabels; returnTo?: string; items?: AccountMenuItem[] }) {
   const links = platformLinks(me.platformUrl, me.product);
   const ref = useRef<HTMLDetailsElement>(null);
   const switchable = me.products.some((p) => p.key !== me.product);
@@ -110,6 +121,21 @@ export function AccountMenu({ me, labels = DEFAULT_LABELS, returnTo }: { me: Too
         <a href={links.account}>{labels.account}</a>
         <a href={links.profile}>{labels.profile}</a>
         <a href={links.security}>{labels.security}</a>
+        {items.map((item) => (
+          <a
+            key={item.href}
+            href={item.href}
+            data-testid={item.testId}
+            onClick={(e) => {
+              if (!item.onSelect || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+              e.preventDefault();
+              if (ref.current) ref.current.open = false;
+              item.onSelect();
+            }}
+          >
+            {item.label}
+          </a>
+        ))}
         {switchable && (
           <>
             <div className="dp-menu-sep" role="separator" />
