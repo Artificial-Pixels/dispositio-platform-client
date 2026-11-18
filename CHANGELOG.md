@@ -6,6 +6,8 @@ Alle Änderungen an `@dispositio/platform-client`, aus Sicht der Werkzeuge, die 
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-18
+
 ### Sicherheit
 
 - **Prozentkodierte Pfade liefen am Schutz vorbei:** Der Router von Fastify dekodiert `/%61pi/…` zu `/api/…`; `platformAuth` prüfte
