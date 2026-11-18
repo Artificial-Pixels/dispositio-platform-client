@@ -189,7 +189,10 @@ export async function platformAuth(app: FastifyInstance, opts: PlatformAuthOptio
   app.decorateRequest('platform', null);
 
   app.addHook('onRequest', async (req, reply) => {
-    if (!req.url.startsWith(prefix)) return;
+    // Maßgeblich ist die getroffene Route, nicht die rohe Adresse: Der Router dekodiert `/%61pi/…` zu `/api/…` – an `req.url` gemessen
+    // liefe eine so geschriebene Anfrage an Sitzung, Zugang und CSRF vorbei. Die Adresse zählt weiter mit (unbekannte Pfade unter dem
+    // Präfix trifft sonst ein Fänger wie `/*` des Werkzeugs).
+    if (!req.routeOptions.url?.startsWith(prefix) && !req.url.startsWith(prefix)) return;
     const protection: RouteProtection = req.routeOptions.config?.platform ?? 'access';
     const unsafe = UNSAFE.has(req.method);
     if (unsafe && !originAllowed(req)) return reply.code(403).send({ code: 'csrf', message: 'Origin nicht erlaubt.' });

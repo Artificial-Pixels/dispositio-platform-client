@@ -107,6 +107,18 @@ describe('platformAuth: Sitzung und Zugang', () => {
     await tool();
     expect((await call('GET', '/missing')).statusCode).toBe(404);
   });
+  it('prozentkodierte Pfade (/%61pi/…) treffen dieselbe Route – und denselben Schutz', async () => {
+    await tool({}, fakePlatform({ gut: session({ status: 'active', source: 'beta', endsAt: null }) }));
+    // ohne Sitzung: weder lesen noch schreiben (auch nicht bei einer Route, die die Sitzung selbst nicht ansieht)
+    expect((await call('GET', '/%61pi/stories')).statusCode).toBe(401);
+    expect((await call('POST', '/%61pi/stories')).statusCode).toBe(401);
+    expect((await call('POST', '/ap%69/stories')).statusCode).toBe(401);
+    // mit Sitzung: wie unter /api – schreiben nur mit CSRF-Token und vom eigenen Origin
+    expect((await call('GET', '/%61pi/stories', 'gut')).json()).toEqual({ user: USER_ID });
+    expect((await call('POST', '/%61pi/stories', 'gut')).statusCode).toBe(403);
+    expect((await call('POST', '/%61pi/stories', 'gut', { 'x-csrf-token': CSRF, origin: 'https://evil.example' })).statusCode).toBe(403);
+    expect((await call('POST', '/%61pi/stories', 'gut', { 'x-csrf-token': CSRF })).statusCode).toBe(200);
+  });
 });
 
 describe('platformAuth: CSRF und Origin', () => {

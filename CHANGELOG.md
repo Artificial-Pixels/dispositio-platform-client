@@ -6,6 +6,13 @@ Alle Änderungen an `@dispositio/platform-client`, aus Sicht der Werkzeuge, die 
 
 ## [Unreleased]
 
+### Sicherheit
+
+- **Prozentkodierte Pfade liefen am Schutz vorbei:** Der Router von Fastify dekodiert `/%61pi/…` zu `/api/…`; `platformAuth` prüfte
+  aber die rohe Adresse – eine so geschriebene Anfrage erreichte die Route ohne Prüfung von Sitzung, Zugang, CSRF-Token und Origin.
+  Routen, die die Sitzung selbst lesen (`userIdOf`), antworteten weiter mit 401; jede andere war offen. Maßgeblich ist jetzt die
+  getroffene Route. Werkzeuge sollten auf diese Version aktualisieren.
+
 ## [1.2.0] - 2026-11-07
 
 ### Hinzugefügt
